@@ -131,6 +131,7 @@ type subSchema struct {
 	maxItems    *int
 	uniqueItems bool
 	contains    *subSchema
+	chain       []*subSchema
 
 	additionalItems interface{}
 

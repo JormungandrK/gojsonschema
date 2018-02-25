@@ -90,6 +90,16 @@ func (v *subSchema) validateRecursive(currentSubSchema *subSchema, currentNode i
 
 	// Handle referenced schemas, returns directly when a $ref is found
 	if currentSubSchema.refSchema != nil {
+		for _, parsedSchema := range currentSubSchema.chain {
+			if reflect.DeepEqual(parsedSchema, currentSubSchema.refSchema) {
+				return
+			}
+		}
+
+		if currentSubSchema.parent != nil {
+			currentSubSchema.chain = append(currentSubSchema.parent.chain, currentSubSchema.parent)
+		}
+
 		v.validateRecursive(currentSubSchema.refSchema, currentNode, result, context)
 		return
 	}
